@@ -1,9 +1,13 @@
 package awesomecucumber.utils;
 
 import awesomecucumber.constants.EnvType;
+import awesomecucumber.constants.Myconstants;
 
 import java.io.FileNotFoundException;
 import java.util.Properties;
+
+import static awesomecucumber.constants.Myconstants.PRODUCTION;
+import static awesomecucumber.constants.Myconstants.STAGE;
 
 public class ConfigLoader
 {
@@ -11,8 +15,8 @@ public class ConfigLoader
     private static ConfigLoader configLoader;
 
     private ConfigLoader() throws FileNotFoundException {
-        String env = System.getProperty("env", String.valueOf(EnvType.STAGE));
-        switch (EnvType.valueOf(env))
+        String env = System.getProperty("env", STAGE);
+        switch (env)
         {
             case STAGE:
                 properties = PropertyUtils.readProperties("src/test/resources/config.properties");

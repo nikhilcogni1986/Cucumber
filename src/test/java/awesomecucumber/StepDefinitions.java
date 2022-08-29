@@ -1,5 +1,6 @@
 package awesomecucumber;
 
+import awesomecucumber.constants.Myconstants;
 import awesomecucumber.domainobjects.BillingDetails;
 import awesomecucumber.domainobjects.Product;
 import awesomecucumber.factory.DriverFactory;
@@ -11,12 +12,9 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import java.io.FileNotFoundException;
-import java.util.List;
-import java.util.Map;
 
 public class StepDefinitions {
     private WebDriver driver;
@@ -27,7 +25,7 @@ public class StepDefinitions {
         System.out.println("STORE PAGE");
         System.out.println(System.getProperty("user.dir"));
         driver = DriverFactory.getDriver();
-        new StorePage(driver).load("/store");
+        new StorePage(driver).load(Myconstants.STORE);
     }
 
     @When("I add {product} to the cart")
@@ -45,7 +43,7 @@ public class StepDefinitions {
     @Given("I'm a guest customer")
     public void i_m_a_guest_customer() throws FileNotFoundException {
         driver = DriverFactory.getDriver();
-        new StorePage(driver).load("/store");
+        new StorePage(driver).load(Myconstants.STORE);
     }
 
     @And("my billing details are")
