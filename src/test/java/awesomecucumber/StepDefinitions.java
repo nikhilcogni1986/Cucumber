@@ -14,6 +14,7 @@ import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Map;
 
@@ -22,11 +23,11 @@ public class StepDefinitions {
     private BillingDetails billingDetails;
 
     @Given("I'm on store page")
-    public void i_m_on_store_page() {
+    public void i_m_on_store_page() throws FileNotFoundException {
         System.out.println("STORE PAGE");
         System.out.println(System.getProperty("user.dir"));
         driver = DriverFactory.getDriver();
-        new StorePage(driver).load("https://askomdch.com/store");
+        new StorePage(driver).load("/store");
     }
 
     @When("I add {product} to the cart")
@@ -42,9 +43,9 @@ public class StepDefinitions {
     }
 
     @Given("I'm a guest customer")
-    public void i_m_a_guest_customer() {
+    public void i_m_a_guest_customer() throws FileNotFoundException {
         driver = DriverFactory.getDriver();
-        new StorePage(driver).load("https://askomdch.com");
+        new StorePage(driver).load("/store");
     }
 
     @And("my billing details are")
