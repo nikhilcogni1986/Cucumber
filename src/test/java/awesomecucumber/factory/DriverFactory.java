@@ -1,5 +1,6 @@
 package awesomecucumber.factory;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -10,7 +11,7 @@ public class DriverFactory
 
     public static WebDriver initializeDriver()
     {
-        System.setProperty("webdriver.chrome.driver","F:\\CucumberFramework\\src\\main\\resources\\drivers\\chromedriver.exe");
+        WebDriverManager.chromedriver().cachePath("drivers").setup();
         driver = new ChromeDriver();
         driver.manage().window().maximize();
         return driver;

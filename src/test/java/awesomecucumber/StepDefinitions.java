@@ -1,22 +1,25 @@
 package awesomecucumber;
 
+import awesomecucumber.domainobjects.BillingDetails;
+import awesomecucumber.domainobjects.Product;
 import awesomecucumber.factory.DriverFactory;
 import awesomecucumber.pages.CartPage;
 import awesomecucumber.pages.CheckoutPage;
 import awesomecucumber.pages.StorePage;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
 import java.util.Map;
 
 public class StepDefinitions {
     private WebDriver driver;
+    private BillingDetails billingDetails;
 
     @Given("I'm on store page")
     public void i_m_on_store_page() {
@@ -26,22 +29,27 @@ public class StepDefinitions {
         new StorePage(driver).load("https://askomdch.com/store");
     }
 
-    @When("I add {string} to the cart")
-    public void i_add_to_the_cart(String productName) {
-        new StorePage(driver).addCartToBtn(productName);
+    @When("I add {product} to the cart")
+    public void i_add_to_the_cart(Product product) {
+        new StorePage(driver).addCartToBtn(product.getName());
     }
 
-    @Then("I should see {int} {string} in the cart")
-    public void i_should_see_in_the_cart(int expectedQuantity, String expectedProductName) {
+    @Then("I should see {int} {product} in the cart")
+    public void i_should_see_in_the_cart(int expectedQuantity, Product product) {
         CartPage cartPage = new CartPage(driver);
         Assert.assertEquals(expectedQuantity, cartPage.getProductQuantity());
-        Assert.assertEquals(expectedProductName, cartPage.getProductName());
+        Assert.assertEquals(product.getName(), cartPage.getProductName());
     }
 
     @Given("I'm a guest customer")
     public void i_m_a_guest_customer() {
         driver = DriverFactory.getDriver();
         new StorePage(driver).load("https://askomdch.com");
+    }
+
+    @And("my billing details are")
+    public void myBillingDetailsAre(BillingDetails billingDetails) {
+        this.billingDetails = billingDetails;
     }
 
     @When("I have a product in the cart")
@@ -55,16 +63,10 @@ public class StepDefinitions {
     }
 
     @When("I provide the billing details")
-    public void i_provide_the_billing_details(List<Map<String, String>> billingDetails) {
+    public void i_provide_the_billing_details() {
 
         CheckoutPage checkoutPage = new CheckoutPage(driver);
-        checkoutPage.enterFirstName(billingDetails.get(0).get("firstname"));
-        checkoutPage.enterLastName(billingDetails.get(0).get("lastname"));
-        checkoutPage.enterAddressLineOne(billingDetails.get(0).get("address_line1"));
-        checkoutPage.enterCity(billingDetails.get(0).get("city"));
-        checkoutPage.selectState(billingDetails.get(0).get("state"));
-        checkoutPage.enterZipcode(billingDetails.get(0).get("zip"));
-        checkoutPage.enterEmailAddress(billingDetails.get(0).get("email"));
+        checkoutPage.setBillingAddress(billingDetails);
     }
 
     @When("I place an order")
@@ -73,8 +75,8 @@ public class StepDefinitions {
     }
 
     @Then("order should be placed successfully")
-    public void order_should_be_placed_successfully() {
-        String actualText = driver.findElement(By.cssSelector("div[class='woocommerce-order'] p")).getText();
-        Assert.assertEquals("Thank you. Your order has been received.", actualText);
+    public void order_should_be_placed_successfully()
+    {
+        Assert.assertEquals(new CheckoutPage(driver).getNotice(),"Thank you. Your order has been received.");
     }
 }
