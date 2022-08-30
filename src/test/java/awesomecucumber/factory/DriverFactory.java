@@ -7,10 +7,11 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class DriverFactory
 {
-    private static WebDriver driver;
+    private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 
     public static WebDriver initializeDriver(String browser)
     {
+        WebDriver driver;
         switch (browser)
         {
             case "CHROME":
@@ -26,12 +27,12 @@ public class DriverFactory
             default:
                 throw new IllegalArgumentException("INVALID BROWSER INPUT");
         }
-
+        DriverFactory.driver.set(driver);
         return driver;
     }
 
     public static WebDriver getDriver()
     {
-        return driver;
+        return driver.get();
     }
 }
