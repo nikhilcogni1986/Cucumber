@@ -1,9 +1,9 @@
 package awesomecucumber;
 
 import awesomecucumber.constants.Myconstants;
+import awesomecucumber.context.TestContext;
 import awesomecucumber.domainobjects.BillingDetails;
 import awesomecucumber.domainobjects.Product;
-import awesomecucumber.factory.DriverFactory;
 import awesomecucumber.pages.CartPage;
 import awesomecucumber.pages.CheckoutPage;
 import awesomecucumber.pages.StorePage;
@@ -17,14 +17,16 @@ import org.openqa.selenium.WebDriver;
 import java.io.FileNotFoundException;
 
 public class StepDefinitions {
-    private WebDriver driver;
+    private final WebDriver driver;
     private BillingDetails billingDetails;
+
+    public StepDefinitions(TestContext context)
+    {
+        driver = context.driver;
+    }
 
     @Given("I'm on store page")
     public void i_m_on_store_page() throws FileNotFoundException {
-        System.out.println("STORE PAGE");
-        System.out.println(System.getProperty("user.dir"));
-        driver = DriverFactory.getDriver();
         new StorePage(driver).load(Myconstants.STORE);
     }
 
@@ -42,7 +44,6 @@ public class StepDefinitions {
 
     @Given("I'm a guest customer")
     public void i_m_a_guest_customer() throws FileNotFoundException {
-        driver = DriverFactory.getDriver();
         new StorePage(driver).load(Myconstants.STORE);
     }
 
