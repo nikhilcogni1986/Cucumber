@@ -19,10 +19,10 @@ public class ConfigLoader
         switch (env)
         {
             case STAGE:
-                properties = PropertyUtils.readProperties("src/test/resources/config.properties");
+                properties = PropertyUtils.readProperties("src/test/resources/stage_config.properties");
                 break;
             case PRODUCTION:
-                properties = PropertyUtils.readProperties("src/test/resources/config.properties");
+                properties = PropertyUtils.readProperties("src/test/resources/prod_config.properties");
                 break;
             default:
                 throw new IllegalArgumentException("Invalid ENV Type!!");
